@@ -17,7 +17,7 @@
             Delete
           </label>
         </div>
-        <a class="btn btn-primary">Edit</a>
+        <a class="btn btn-primary btn-edit">Edit</a>
       </div>
     </div>
   </div>
@@ -49,5 +49,16 @@ const computedDescription = computed(() => {
 }
 .form-check {
   margin-top: 5px;
+  margin-left: 5px;
+}
+.btn-edit {
+	margin-right: 10px;
+}
+.card-body {
+	background-color: rgb(230, 230, 230);
+}
+.form-check-input {
+	box-shadow: 0px 0px 5px gray;
+	background-color: white;
 }
 </style>
