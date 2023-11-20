@@ -1,11 +1,17 @@
 <template>
-  <div class="card-group">
-    <ProjectListProject
-      class="project-item"
-      v-for="project in projectList"
-      :project="project"
-      :key="project.id"
-    />
+  <div class="project-list">
+    <div class="project-list-buttons">
+      <button class="btn btn-primary btn-lg">Add project</button>
+      <button class="btn btn-danger btn-lg">Delete selected</button>
+    </div>
+    <div class="card-group">
+      <ProjectListProject
+        class="project-item"
+        v-for="project in projectList"
+        :project="project"
+        :key="project.id"
+      />
+    </div>
   </div>
 </template>
 
@@ -20,7 +26,7 @@ const project = ref({
   id: 0,
 })
 const projectList = ref([])
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 3; i++) {
   const projectItem = ref({ ...project.value })
   projectItem.value.id = i
   if (i === 2) {
@@ -33,16 +39,28 @@ for (let i = 0; i < 10; i++) {
 <style scoped>
 .card-group {
   flex-wrap: wrap;
-	gap: 1em;
-	justify-content: center;
-	background-color: gray;
+  gap: 1em;
+  justify-content: center;
 }
 .card-group .project-item {
   flex-basis: calc(100% / 6);
   flex-shrink: 0;
   flex-grow: 0;
-	min-width: 20em;
+  min-width: 20em;
   box-shadow: 0px 0px 5px gray;
-
+}
+.project-list-buttons {
+  padding-top: 5em;
+  padding-bottom: 3em;
+  display: flex;
+  justify-content: space-around;
+}
+.btn-lg {
+  box-shadow: 2px 2px 10px rgb(10, 10, 10, 0.5);
+  width: 20em;
+}
+.project-list {
+	background-color: gray;
+	flex: 1 0 auto;
 }
 </style>
