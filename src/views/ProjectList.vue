@@ -1,7 +1,12 @@
 <template>
   <div class="project-list">
     <div class="project-list-buttons">
-      <button class="btn btn-primary btn-lg">Add project</button>
+      <button
+        class="btn btn-primary btn-lg"
+        @click="$router.push('project/new')"
+      >
+        Add project
+      </button>
       <button class="btn btn-danger btn-lg">Delete selected</button>
     </div>
     <div class="card-group">
@@ -23,7 +28,9 @@ import ProjectListProject from '@/components/ProjectListProject.vue'
 const store = useStore()
 
 const getProjects = computed(() => store.getters.getProjects)
-onMounted(() => {store.dispatch('fetchProjects')})
+onMounted(() => {
+  store.dispatch('fetchProjects')
+})
 </script>
 
 <style scoped>
