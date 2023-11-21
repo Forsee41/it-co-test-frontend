@@ -18,7 +18,11 @@
             Delete
           </label>
         </div>
-        <a class="btn btn-primary btn-edit">Edit</a>
+        <a
+          class="btn btn-primary btn-edit"
+					@click="$router.push(`project/${project.id}`)"
+          >Edit</a
+        >
       </div>
     </div>
   </div>

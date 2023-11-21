@@ -7,7 +7,7 @@
     <div class="card-group">
       <ProjectListProject
         class="project-item"
-        v-for="project in projectList"
+        v-for="project in getProjects"
         :project="project"
         :key="project.id"
       />
@@ -16,24 +16,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useStore } from 'vuex'
+import { computed, onMounted } from 'vue'
 import ProjectListProject from '@/components/ProjectListProject.vue'
-const project = ref({
-  title: 'Title',
-  description:
-    'Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.',
-  link: '',
-  id: 0,
-})
-const projectList = ref([])
-for (let i = 0; i < 3; i++) {
-  const projectItem = ref({ ...project.value })
-  projectItem.value.id = i
-  if (i === 2) {
-    projectItem.value.description = 'hello'
-  }
-  projectList.value.push(projectItem.value)
-}
+
+const store = useStore()
+
+const getProjects = computed(() => store.getters.getProjects)
+onMounted(() => {store.dispatch('fetchProjects')})
 </script>
 
 <style scoped>
@@ -60,7 +50,7 @@ for (let i = 0; i < 3; i++) {
   width: 20em;
 }
 .project-list {
-	background-color: gray;
-	flex: 1 0 auto;
+  background-color: gray;
+  flex: 1 0 auto;
 }
 </style>
