@@ -4,10 +4,14 @@ import { fetchProjects } from './project-service'
 export default createStore({
   state: {
     projects: [],
+    forDeletion: [],
   },
   getters: {
     getProjects(state) {
       return state.projects
+    },
+    getForDeletion(state) {
+      return state.forDeletion
     },
     getProject(state) {
       return (id) => {
@@ -27,6 +31,17 @@ export default createStore({
   mutations: {
     setProjects(state, projects) {
       state.projects = projects
+    },
+    toggleRemoved(state, id) {
+      const index = state.forDeletion.indexOf(id)
+      if (index === -1) {
+        state.forDeletion.push(id)
+      } else {
+        state.forDeletion.splice(index, 1)
+      }
+    },
+    clearRemoved(state) {
+      state.forDeletion = []
     },
   },
   actions: {

@@ -7,7 +7,12 @@
       >
         Add project
       </button>
-      <button class="btn btn-danger btn-lg">Delete selected</button>
+
+      <button type="button" @click="showModal" class="btn btn-danger btn-lg">
+        Delete selected
+      </button>
+
+      <DeleteConfirmation class="delete-confirmations" />
     </div>
     <div class="card-group">
       <ProjectListProject
@@ -24,6 +29,14 @@
 import { useStore } from 'vuex'
 import { computed, onMounted } from 'vue'
 import ProjectListProject from '@/components/ProjectListProject.vue'
+import DeleteConfirmation from '@/components/DeleteConfirmation.vue'
+import { Modal } from 'bootstrap'
+
+async function showModal() {
+  const modalElement = document.getElementById('delete-confirmation')
+  const modal = new Modal(modalElement)
+  modal.show()
+}
 
 const store = useStore()
 

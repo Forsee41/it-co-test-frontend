@@ -13,6 +13,7 @@
             type="checkbox"
             value=""
             id="flexCheckDefault"
+            @change="store.commit('toggleRemoved', props.project.id)"
           />
           <label class="form-check-label" for="flexCheckDefault">
             Delete
@@ -20,7 +21,7 @@
         </div>
         <a
           class="btn btn-primary btn-edit"
-					@click="$router.push(`project/${project.id}`)"
+          @click="$router.push(`project/${project.id}`)"
           >Edit</a
         >
       </div>
@@ -29,9 +30,11 @@
 </template>
 
 <script setup>
+import { useStore } from 'vuex'
 import { computed } from 'vue'
 import placeholder from '@/assets/image_placeholder.jpg'
 
+const store = useStore()
 const props = defineProps(['project'])
 const computedImgLink = computed(() => {
   return props.project.imgLink ? props.project.imgLink : placeholder

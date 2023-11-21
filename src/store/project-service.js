@@ -28,3 +28,11 @@ export async function patchProject(project) {
     console.error(error)
   }
 }
+
+export async function deleteProjects(project_ids) {
+  const requests = project_ids.value.map((id) =>
+    axios.delete(`${BASE_URL}/project/${id}`)
+  )
+  // don't care about exceptions on DELETE
+  await axios.all(requests)
+}
