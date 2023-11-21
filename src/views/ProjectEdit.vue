@@ -40,7 +40,7 @@
 import placeholder from '@/assets/image_placeholder.jpg'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
-import { onMounted, computed, ref, watch } from 'vue'
+import { onMounted, computed } from 'vue'
 import { pushNewProject, patchProject } from '@/store/project-service'
 
 const store = useStore()
@@ -50,31 +50,20 @@ const projectId = route.params.id
 
 // call stack is executing before futures, so imageLink tries to access .value of
 // undefined project if fetch is in progress
-const isLoading = ref(true)
 const currentProject = computed(() => store.getters.getProject(projectId))
 
-watch(currentProject, (newProject) => {
-  if (newProject) {
-    isLoading.value = false
-  }
-})
-
 const imageLink = computed(() =>
-  isLoading.value
-    ? placeholder
-    : currentProject.value.image
-    ? currentProject.value.image
-    : placeholder
+  currentProject.value.image ? currentProject.value.image : placeholder
 )
 
 async function saveProject() {
   if (currentProject.value.id == 'new') {
     await pushNewProject(currentProject.value)
     router.push('/')
-	} else {
-		await patchProject(currentProject.value)
+  } else {
+    await patchProject(currentProject.value)
     router.push('/')
-	}
+  }
 }
 
 onMounted(() => {

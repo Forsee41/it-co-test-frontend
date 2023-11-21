@@ -10,7 +10,6 @@
         </div>
         <div class="modal-footer">
           <button
-            @click="closeModal"
             type="button"
             class="btn btn-primary"
             data-bs-dismiss="modal"
