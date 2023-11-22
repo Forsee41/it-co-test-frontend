@@ -34,10 +34,14 @@ import { useStore } from 'vuex'
 import { computed } from 'vue'
 import placeholder from '@/assets/image_placeholder.jpg'
 
+const BASE_URL = process.env.VUE_APP_BASEURL
+
 const store = useStore()
 const props = defineProps(['project'])
 const computedImgLink = computed(() => {
-  return props.project.imgLink ? props.project.imgLink : placeholder
+  return props.project.image
+    ? `${BASE_URL}/image/${props.project.id}`
+    : placeholder
 })
 const computedDescription = computed(() => {
   return props.project.description.length < 127

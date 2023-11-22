@@ -13,7 +13,8 @@ export async function fetchProjects() {
 
 export async function pushNewProject(project) {
   try {
-    await axios.post(`${BASE_URL}/project/`, project)
+    const response = await axios.post(`${BASE_URL}/project/`, project)
+    return response.data['id']
   } catch (error) {
     console.error(error)
   }

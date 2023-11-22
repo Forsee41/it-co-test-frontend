@@ -2,13 +2,22 @@
   <div class="container">
     <div class="form-group d-flex justify-content-center">
       <div class="form-row">
-        <img :src="imageLink" class="img-thumbnail" />
+        <img
+          v-if="renderImage"
+          :src="imageLink"
+          class="img-thumbnail"
+          :key="imageKey"
+        />
       </div>
     </div>
     <div class="form-group d-flex justify-content-center mt-4">
-      <button @click="changeImage" class="btn btn-primary change-img-btn">
-        Change Image
-      </button>
+      <button @click="openFileBrowser">Upload Image</button>
+      <input
+        type="file"
+        ref="fileInput"
+        @change="handleFileChange"
+        style="display: none"
+      />
     </div>
     <div class="form-group">
       <label>Project Name</label>
@@ -40,8 +49,33 @@
 import placeholder from '@/assets/image_placeholder.jpg'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, ref, nextTick } from 'vue'
 import { pushNewProject, patchProject } from '@/store/project-service'
+import { sendImage } from '@/store/image-upload'
+
+const BASE_URL = process.env.VUE_APP_BASEURL
+const fileInput = ref(null)
+let tempImage = ref(null)
+let renderImage = ref(true)
+
+const openFileBrowser = () => {
+  fileInput.value.click()
+}
+async function handleFileChange(event) {
+  const file = event.target.files[0]
+  const extension = file.name.split('.').pop().toLowerCase()
+
+  if (!['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
+    alert('Invalid file type')
+  } else if (currentProject.value.id !== 'new') {
+    await sendImage(file, currentProject.value.id)
+  } else {
+    tempImage = file
+  }
+  renderImage.value = false
+  await nextTick()
+  renderImage.value = true
+}
 
 const store = useStore()
 const route = useRoute()
@@ -53,12 +87,20 @@ const projectId = route.params.id
 const currentProject = computed(() => store.getters.getProject(projectId))
 
 const imageLink = computed(() =>
-  currentProject.value.image ? currentProject.value.image : placeholder
+	// This doesn't work
+  tempImage.value
+    ? `${URL.createObjectURL(tempImage.value)}`
+    : currentProject.value.image
+    ? `${BASE_URL}/image/${currentProject.value.id}`
+    : placeholder
 )
 
 async function saveProject() {
   if (currentProject.value.id == 'new') {
-    await pushNewProject(currentProject.value)
+    const newProjectId = await pushNewProject(currentProject.value)
+    if (!tempImage.value == null) {
+      await sendImage(tempImage.value, newProjectId)
+    }
     router.push('/')
   } else {
     await patchProject(currentProject.value)
