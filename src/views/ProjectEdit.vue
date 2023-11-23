@@ -101,7 +101,9 @@ const projectId = route.params.id
 // call stack is executing before futures, so imageLink tries to access .value of
 // undefined project if fetch is in progress
 const currentProject = computed(() => store.getters.getProject(projectId))
-const allowRender = computed(() => store.getters.getProjects || projectId === "new")
+const allowRender = computed(
+  () => store.getters.getProjects || projectId === 'new'
+)
 
 const imageLink = computed(() =>
   tempImage.value
@@ -160,5 +162,9 @@ onMounted(() => {
 .form-check {
   margin-left: 3em;
   margin-top: 5px;
+}
+img {
+  width: 100%;
+  max-height: 30em;
 }
 </style>
