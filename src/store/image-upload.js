@@ -7,9 +7,7 @@ export async function sendImage(file, id) {
   formData.append('file', file)
   const endpoint = `${BASE_URL}/image/${id}`
 
-  axios.put(endpoint, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+  await axios.put(endpoint, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
   })
 }

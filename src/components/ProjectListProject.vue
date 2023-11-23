@@ -9,11 +9,12 @@
       <div class="project-interactions">
         <div class="form-check">
           <input
+            v-model="deleteChecked"
             class="form-check-input"
             type="checkbox"
             value=""
             id="flexCheckDefault"
-            @change="store.commit('toggleRemoved', props.project.id)"
+            @change="toggleCheckbox"
           />
           <label class="form-check-label" for="flexCheckDefault">
             Delete
@@ -31,8 +32,10 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import placeholder from '@/assets/image_placeholder.jpg'
+
+const deleteChecked = ref(false)
 
 const BASE_URL = process.env.VUE_APP_BASEURL
 
@@ -43,6 +46,10 @@ const computedImgLink = computed(() => {
     ? `${BASE_URL}/image/${props.project.id}`
     : placeholder
 })
+
+function toggleCheckbox() {
+  store.commit('toggleRemoved', props.project.id)
+}
 const computedDescription = computed(() => {
   return props.project.description.length < 127
     ? props.project.description
