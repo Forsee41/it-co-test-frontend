@@ -11,3 +11,8 @@ export async function sendImage(file, id) {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
 }
+
+export async function deleteImage(id) {
+  const endpoint = `${BASE_URL}/image/${id}`
+  await axios.delete(endpoint)
+}

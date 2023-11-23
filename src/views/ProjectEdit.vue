@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <section v-if="getProjects.length">
+    <section v-if="allowRender">
       <div class="form-group d-flex justify-content-center">
         <div class="form-row">
           <img
@@ -12,13 +12,27 @@
         </div>
       </div>
       <div class="form-group d-flex justify-content-center mt-4">
-        <button @click="openFileBrowser">Upload Image</button>
+        <button @click="openFileBrowser" class="btn btn-primary">
+          Upload Image
+        </button>
         <input
           type="file"
           ref="fileInput"
           @change="handleFileChange"
           style="display: none"
         />
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+            v-model="deleteImageCheck"
+          />
+          <label class="form-check-label" for="flexCheckDefault">
+            Delete image
+          </label>
+        </div>
       </div>
       <div class="form-group">
         <label>Project Name</label>
@@ -54,12 +68,13 @@ import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, computed, ref, nextTick } from 'vue'
 import { pushNewProject, patchProject } from '@/store/project-service'
-import { sendImage } from '@/store/image-upload'
+import { sendImage, deleteImage } from '@/store/image-upload'
 
 const BASE_URL = process.env.VUE_APP_BASEURL
 const fileInput = ref(null)
 let tempImage = ref(null)
 let renderImage = ref(true)
+let deleteImageCheck = ref(false)
 
 const openFileBrowser = () => {
   fileInput.value.click()
@@ -86,7 +101,7 @@ const projectId = route.params.id
 // call stack is executing before futures, so imageLink tries to access .value of
 // undefined project if fetch is in progress
 const currentProject = computed(() => store.getters.getProject(projectId))
-const getProjects = computed(() => store.getters.getProjects)
+const allowRender = computed(() => store.getters.getProjects || projectId === "new")
 
 const imageLink = computed(() =>
   tempImage.value
@@ -99,12 +114,14 @@ const imageLink = computed(() =>
 async function saveProject() {
   if (currentProject.value.id == 'new') {
     const newProjectId = await pushNewProject(currentProject.value)
-    if (tempImage.value) {
+    if (tempImage.value && !deleteImageCheck.value) {
       await sendImage(tempImage.value, newProjectId)
     }
   } else {
     await patchProject(currentProject.value)
-    if (tempImage.value) {
+    if (deleteImageCheck.value) {
+      await deleteImage(currentProject.value.id)
+    } else if (tempImage.value) {
       await sendImage(tempImage.value, currentProject.value.id)
     }
   }
@@ -139,5 +156,9 @@ onMounted(() => {
 }
 .btn {
   box-shadow: 10px 10px 20px rgb(10, 10, 10, 0.2);
+}
+.form-check {
+  margin-left: 3em;
+  margin-top: 5px;
 }
 </style>
