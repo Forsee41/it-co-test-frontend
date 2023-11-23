@@ -67,10 +67,8 @@ async function handleFileChange(event) {
 
   if (!['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
     alert('Invalid file type')
-  } else if (currentProject.value.id !== 'new') {
-    await sendImage(file, currentProject.value.id)
   } else {
-    tempImage = file
+    tempImage.value = file
   }
   renderImage.value = false
   await nextTick()
@@ -87,7 +85,7 @@ const projectId = route.params.id
 const currentProject = computed(() => store.getters.getProject(projectId))
 
 const imageLink = computed(() =>
-	// This doesn't work
+  // This doesn't work
   tempImage.value
     ? `${URL.createObjectURL(tempImage.value)}`
     : currentProject.value.image
@@ -98,14 +96,16 @@ const imageLink = computed(() =>
 async function saveProject() {
   if (currentProject.value.id == 'new') {
     const newProjectId = await pushNewProject(currentProject.value)
-    if (!tempImage.value == null) {
+    if (tempImage.value) {
       await sendImage(tempImage.value, newProjectId)
     }
-    router.push('/')
   } else {
     await patchProject(currentProject.value)
-    router.push('/')
+    if (tempImage.value) {
+      await sendImage(tempImage.value, currentProject.value.id)
+    }
   }
+  router.push('/')
 }
 
 onMounted(() => {
