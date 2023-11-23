@@ -21,7 +21,7 @@ export default createStore({
           image: '',
           description: '',
         }
-        if (id == 'new') {
+        if (id === 'new') {
           return blankProject
         }
         return state.projects.find((item) => item.id == id)

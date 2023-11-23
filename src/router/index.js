@@ -4,7 +4,7 @@ import ProjectList from '../views/ProjectList.vue'
 
 const routes = [
   {
-		path: '/project/:id',
+    path: '/project/:id',
     name: 'project-edit',
     component: ProjectEdit,
   },
