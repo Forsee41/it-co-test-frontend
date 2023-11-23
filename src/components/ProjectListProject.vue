@@ -37,7 +37,7 @@ import { useStore } from 'vuex'
 import { computed, ref } from 'vue'
 import placeholder from '@/assets/image_placeholder.jpg'
 
-const deleteChecked = ref(false)
+let deleteChecked = ref(false)
 
 const BASE_URL = process.env.VUE_APP_BASEURL
 
