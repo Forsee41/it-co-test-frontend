@@ -20,6 +20,7 @@ export default createStore({
           name: '',
           image: '',
           description: '',
+          link: '',
         }
         if (id === 'new') {
           return blankProject
